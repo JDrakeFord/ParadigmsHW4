@@ -18,12 +18,15 @@ public class Game extends JFrame
 	Model model;
 	View view;
 	Controller controller;
+	Link link;
 	public Json json;
 	public Game()
 	{
-		model = new Model();
-		controller = new Controller(model, this);
+		link = new Link();
+		model = new Model(link);
+		controller = new Controller(model, this, link);
 		view = new View(controller, model);
+		view.setLink(link);
 		this.setTitle("A4 - Collide!!!");
 		controller.onLoad();
 		this.setSize(width, height);
@@ -40,6 +43,8 @@ public class Game extends JFrame
 		while(true)
 		{
 			controller.update();
+			model.update(link); // Indirectly calls Link.update
+			//link.update();
 			view.repaint(); // Indirectly calls View.paintComponent
 			Toolkit.getDefaultToolkit().sync(); // Updates screen
 

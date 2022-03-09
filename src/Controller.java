@@ -15,11 +15,17 @@ class Controller implements ActionListener, MouseListener, KeyListener
 	View view;
 	Model model;
 	Game game;
+	Link link;
 	boolean editing = false;
-	Controller(Model m, Game g)
+	public static boolean UP = false;
+	public static boolean DOWN = false;
+	public static boolean LEFT = false;
+	public static boolean RIGHT = false;
+	Controller(Model m, Game g, Link l)
 	{
 		model = m;
 		game = g;
+		link = l;
 	}
 
 	void setModel(Model m)
@@ -56,7 +62,11 @@ class Controller implements ActionListener, MouseListener, KeyListener
 			case KeyEvent.VK_ESCAPE: System.exit(0); break;
 			case KeyEvent.VK_S: model.marshall().save("map.json");
 			case KeyEvent.VK_E: if(editing){editing = false; System.out.println("STOPPED EDITING");}
-								else{editing = true; System.out.println("NOW EDITING");}
+								else{editing = true; System.out.println("NOW EDITING");} break;
+			case KeyEvent.VK_DOWN: DOWN = true; break;
+			case KeyEvent.VK_UP: UP = true; break;
+			case KeyEvent.VK_LEFT: LEFT = true; break;
+			case KeyEvent.VK_RIGHT: RIGHT = true; break;
 		}
 	}
 	public void onLoad()
@@ -70,6 +80,13 @@ class Controller implements ActionListener, MouseListener, KeyListener
 	}
 	public void keyReleased(KeyEvent e)
 	{
+		switch(e.getKeyCode())
+		{
+			case KeyEvent.VK_DOWN: DOWN = false; break;
+			case KeyEvent.VK_UP: UP = false; break;
+			case KeyEvent.VK_LEFT: LEFT = false; break;
+			case KeyEvent.VK_RIGHT: RIGHT = false; break;
+		}
 
 	}
 	public void keyTyped(KeyEvent e)
@@ -77,8 +94,20 @@ class Controller implements ActionListener, MouseListener, KeyListener
 	}
 	void update()
 	{
-
+			if(RIGHT) {
+				link.absX += link.speed;
+			}
+			if(LEFT) {
+				link.absX -= link.speed;
+			}
+			if(UP) {
+				link.absY -= link.speed;
+			}
+			if(DOWN) {
+				link.absY += link.speed;
+			}
 	}
+
 	public void actionPerformed(ActionEvent e) {
 
 	}
