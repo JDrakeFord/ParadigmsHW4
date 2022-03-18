@@ -1,3 +1,7 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
 public class Brick {
     int x;
     int y;
@@ -6,6 +10,8 @@ public class Brick {
     int top;
     int bottom;
     public static int brickSize = 50;
+    public static BufferedImage brick_image;
+
 
     public Brick(int xIn, int yIn)
     {
@@ -15,6 +21,16 @@ public class Brick {
         right = brickSize + x;
         top = y;
         bottom = brickSize + y;
+        //Load image
+        if(brick_image == null) {
+            try {
+                brick_image =
+                        ImageIO.read(new File("brick.jpg"));
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+                System.exit(1);
+            }
+        }
     }
 
     public Brick(Json ob)
@@ -25,6 +41,16 @@ public class Brick {
         right = brickSize + x;
         top = y;
         bottom = brickSize + y;
+        //Load image
+        if(brick_image == null) {
+            try {
+                brick_image =
+                        ImageIO.read(new File("brick.jpg"));
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
+                System.exit(1);
+            }
+        }
     }
 
     public Json marshall()

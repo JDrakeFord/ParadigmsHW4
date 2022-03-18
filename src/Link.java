@@ -1,3 +1,9 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.Buffer;
+
 public class Link {
     int height = 70;
     int width = 60;
@@ -14,6 +20,25 @@ public class Link {
     public int oldLeft;
     public int oldBottom;
     public int oldTop;
+    public static BufferedImage[] link_images;
+
+    public Link()
+    {
+        link_images = new BufferedImage[50];
+        for(int i = 0; i < 50; i++)
+        {
+            if(link_images[i] == null) {
+                try {
+                    if (i < 9)
+                        link_images[i] = ImageIO.read(new File("link_images/link" + "0" + (i + 1) + ".png"));
+                    else
+                        link_images[i] = ImageIO.read(new File("link_images/link" + (i + 1) + ".png"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     void update()
     {

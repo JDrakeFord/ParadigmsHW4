@@ -160,22 +160,22 @@ public abstract class Json
 
     public void add(String name, boolean val)
     {
-        this.asObject().add(name, new Json.JBool(val));
+        this.asObject().add(name, new JBool(val));
     }
 
     public void add(String name, long val)
     {
-        this.asObject().add(name, new Json.JLong(val));
+        this.asObject().add(name, new JLong(val));
     }
 
     public void add(String name, double val)
     {
-        this.asObject().add(name, new Json.JDouble(val));
+        this.asObject().add(name, new JDouble(val));
     }
 
     public void add(String name, String val)
     {
-        this.asObject().add(name, new Json.JString(val));
+        this.asObject().add(name, new JString(val));
     }
 
     public void add(Json item)
@@ -185,22 +185,22 @@ public abstract class Json
 
     public void add(boolean val)
     {
-        this.asList().add(new Json.JBool(val));
+        this.asList().add(new JBool(val));
     }
 
     public void add(long val)
     {
-        this.asList().add(new Json.JLong(val));
+        this.asList().add(new JLong(val));
     }
 
     public void add(double val)
     {
-        this.asList().add(new Json.JDouble(val));
+        this.asList().add(new JDouble(val));
     }
 
     public void add(String val)
     {
-        this.asList().add(new Json.JString(val));
+        this.asList().add(new JString(val));
     }
 
     public boolean asBool()
