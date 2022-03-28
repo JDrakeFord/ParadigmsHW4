@@ -17,14 +17,20 @@ class Controller implements ActionListener, MouseListener, KeyListener
 	Game game;
 	Link link;
 	boolean editing = false;
-	public static boolean UP = false;
-	public static boolean DOWN = false;
-	public static boolean LEFT = false;
-	public static boolean RIGHT = false;
+	boolean pots = false;
+	boolean UP = false;
+	boolean DOWN = false;
+	boolean LEFT = false;
+	boolean RIGHT = false;
 	Controller(Model m, Game g, Link l)
 	{
 		model = m;
 		game = g;
+		link = l;
+	}
+
+	void setLink(Link l)
+	{
 		link = l;
 	}
 
@@ -38,13 +44,18 @@ class Controller implements ActionListener, MouseListener, KeyListener
 		view = v;
 	}
 	public void mousePressed(MouseEvent e) {
-		if(editing) {
+		if(editing && !pots) {
 			int x = e.getX() - e.getX() % Brick.brickSize;
 			int y = e.getY() - e.getY() % Brick.brickSize;
-			if (model.isBrick(x + view.scrollPosX, y + view.scrollPosY))
-				model.removeBrick(x + view.scrollPosX, y + view.scrollPosY);
+			if (model.isBrick(x + View.scrollPosX, y + View.scrollPosY))
+				model.removeBrick(x + View.scrollPosX, y + View.scrollPosY);
 			else
-				model.addBrick(x + view.scrollPosX, y + view.scrollPosY);
+				model.addBrick(x + View.scrollPosX, y + View.scrollPosY);
+		}
+		else if(editing) {
+			int x = e.getX() - e.getX() % Pot.potSize;
+			int y = e.getY() - e.getY() % Pot.potSize;
+			model.addPot(x + View.scrollPosX, y + View.scrollPosY);
 		}
 	}
 	public void mouseReleased(MouseEvent e) {    }
@@ -60,13 +71,19 @@ class Controller implements ActionListener, MouseListener, KeyListener
 
 			case KeyEvent.VK_Q: System.exit(0); break;
 			case KeyEvent.VK_ESCAPE: System.exit(0); break;
-			case KeyEvent.VK_S: model.marshall().save("map.json");
+			case KeyEvent.VK_S: model.marshall().save("map.json"); System.out.println("SAVED"); break;
 			case KeyEvent.VK_E: if(editing){editing = false; System.out.println("STOPPED EDITING");}
 								else{editing = true; System.out.println("NOW EDITING");} break;
 			case KeyEvent.VK_DOWN: DOWN = true; break;
 			case KeyEvent.VK_UP: UP = true; break;
 			case KeyEvent.VK_LEFT: LEFT = true; break;
 			case KeyEvent.VK_RIGHT: RIGHT = true; break;
+			case KeyEvent.VK_P:
+				pots = !pots;
+				if(pots)
+					System.out.println("NOW PLACING POTS (IF EDITING)");
+				else
+					System.out.println("NOW PLACING BRICKS (IF EDITING)");
 		}
 	}
 	public void onLoad()

@@ -1,16 +1,16 @@
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class Brick {
-    int x;
-    int y;
+public class Brick extends Sprite {
     int left;
     int right;
     int top;
     int bottom;
     public static int brickSize = 50;
     public static BufferedImage brick_image;
+    View view;
 
 
     public Brick(int xIn, int yIn)
@@ -31,6 +31,11 @@ public class Brick {
                 System.exit(1);
             }
         }
+    }
+
+    void setView(View v)
+    {
+        view = v;
     }
 
     public Brick(Json ob)
@@ -65,5 +70,15 @@ public class Brick {
     public String toString()
     {
         return "Brick (x,y) = (" + x + ", " + y + ")";
+    }
+
+    @Override
+    void update() {
+
+    }
+
+    @Override
+    void draw(Graphics g) {
+        g.drawImage(Brick.brick_image, x - View.scrollPosX, y - View.scrollPosY, null);
     }
 }

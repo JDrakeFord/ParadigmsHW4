@@ -25,8 +25,11 @@ public class Game extends JFrame
 		link = new Link();
 		model = new Model(link);
 		controller = new Controller(model, this, link);
+		link.setController(controller);
 		view = new View(controller, model);
 		view.setLink(link);
+		link.setView(view);
+		model.setView(view);
 		this.setTitle("A4 - Collide!!!");
 		controller.onLoad();
 		this.setSize(width, height);
@@ -62,6 +65,11 @@ public class Game extends JFrame
 	public void setModel(Model m)
 	{
 		model = m;
+	}
+
+	void setLink(Link l)
+	{
+		link = l;
 	}
 
 	public static void main(String[] args)

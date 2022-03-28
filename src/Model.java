@@ -13,12 +13,23 @@ import java.util.Iterator;
 
 class Model
 {
-    ArrayList<Brick> bricks;
+    ArrayList<Sprite> sprites;
     Link link;
+    View view;
 
     Model(Link l)
     {
-        bricks = new ArrayList<Brick>();
+        sprites = new ArrayList<Sprite>();
+        link = l;
+    }
+
+    void setView(View v)
+    {
+        view = v;
+    }
+
+    void setLink(Link l)
+    {
         link = l;
     }
 
@@ -26,28 +37,21 @@ class Model
     public void update(Link l)
     {
         link = l;
-        System.out.println(l);
-        Iterator<Brick> iter = bricks.iterator();
+        Iterator<Sprite> iter = sprites.iterator();
         while(iter.hasNext())
         {
-            Brick b = iter.next();
-            if(isColliding(link, b))
-            {
-                if(link.right > b.left && link.oldRight <= b.left) {
-                    link.absX = link.oldLeft;
-                    System.out.println(1);
-                }
-                else if(link.left < b.right && link.oldLeft >= b.right) {
-                    link.absX = link.oldRight - link.width;
-                    System.out.println(2);
-                }
-                else if(link.bottom > b.top && link.oldBottom <= b.top) {
-                    link.absY = link.oldTop;
-                    System.out.println(3);
-                }
-                else if(link.top < b.bottom && link.oldTop >= b.bottom) {
-                    link.absY = link.oldBottom - link.height;
-                    System.out.println(4);
+            Sprite s = iter.next();
+            if(s instanceof Brick b) {
+                if (isColliding(link, b)) {
+                    if (link.right > b.left && link.oldRight <= b.left) {
+                        link.absX = link.oldLeft;
+                    } else if (link.left < b.right && link.oldLeft >= b.right) {
+                        link.absX = link.oldRight - link.width;
+                    } else if (link.bottom > b.top && link.oldBottom <= b.top) {
+                        link.absY = link.oldTop;
+                    } else if (link.top < b.bottom && link.oldTop >= b.bottom) {
+                        link.absY = link.oldBottom - link.height;
+                    }
                 }
             }
         }
@@ -73,29 +77,33 @@ class Model
 
     public Model(Json ob)
     {
-        bricks = new ArrayList<Brick>();
-        Json tmpList = ob.get("bricks");
+        sprites = new ArrayList<Sprite>();
+        Json tmpList = ob.get("sprites");
         for(int i = 0; i < tmpList.size(); i++)
         {
-            bricks.add(new Brick(tmpList.get(i)));
+            if(tmpList.get(i).toString().charAt(2) == 'x')
+                sprites.add(new Brick(tmpList.get(i)));
+            else if(tmpList.get(i).toString().charAt(2) == 'a') {
+                sprites.add(new Link(tmpList.get(i)));
+            }
         }
     }
 
     public void addBrick(int x, int y)
     {
-        bricks.add(new Brick(x, y));
+        sprites.add(new Brick(x, y));
     }
 
     public void removeBrick(int x, int y)
     {
-        bricks.removeIf(b -> b.x == x && b.y == y);
+        sprites.removeIf(b -> b.x == x && b.y == y);
     }
 
     public boolean isBrick(int x, int y)
     {
-        for(Brick b : bricks)
+        for(Sprite s : sprites)
         {
-            if(b.x == x && b.y == y)
+            if(s instanceof Brick b && b.x == x && b.y == y)
                 return true;
         }
         return false;
@@ -105,14 +113,16 @@ class Model
     {
         Json ob = Json.newObject();
         Json tmpList = Json.newList();
-        ob.add("bricks", tmpList);
-        for(Brick b : bricks)
+        ob.add("sprites", tmpList);
+        for(Sprite s : sprites)
         {
-            tmpList.add(b.marshall());
+            tmpList.add(s.marshall());
         }
         return ob;
     }
 
 
-
+    public void addPot(int x, int y) {
+        sprites.add(new Pot(x, y));
+    }
 }
