@@ -84,6 +84,21 @@ class Controller implements ActionListener, MouseListener, KeyListener
 					System.out.println("NOW PLACING POTS (IF EDITING)");
 				else
 					System.out.println("NOW PLACING BRICKS (IF EDITING)");
+				break;
+			case KeyEvent.VK_CONTROL:
+				if(link.lastImageIndex >= 4 && link.lastImageIndex <= 12) {
+					model.sprites.add(new Boomerang(link.absX + link.width / 2, link.absY + link.height / 2, Boomerang.Direction.DOWN));
+				}
+				else if(link.lastImageIndex >= 13 && link.lastImageIndex <= 21) {
+					model.sprites.add(new Boomerang(link.absX + link.width / 2, link.absY + link.height / 2, Boomerang.Direction.LEFT));
+				}
+				else if(link.lastImageIndex >= 30 && link.lastImageIndex <= 38) {
+					model.sprites.add(new Boomerang(link.absX + link.width / 2, link.absY + link.height / 2, Boomerang.Direction.RIGHT));
+				}
+				else {
+					model.sprites.add(new Boomerang(link.absX + link.width / 2, link.absY + link.height / 2, Boomerang.Direction.UP));
+				}
+				break;
 		}
 	}
 	public void onLoad()

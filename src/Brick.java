@@ -2,15 +2,11 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 
 public class Brick extends Sprite {
-    int left;
-    int right;
-    int top;
-    int bottom;
     public static int brickSize = 50;
     public static BufferedImage brick_image;
-    View view;
 
 
     public Brick(int xIn, int yIn)
@@ -31,11 +27,6 @@ public class Brick extends Sprite {
                 System.exit(1);
             }
         }
-    }
-
-    void setView(View v)
-    {
-        view = v;
     }
 
     public Brick(Json ob)
@@ -72,8 +63,34 @@ public class Brick extends Sprite {
         return "Brick (x,y) = (" + x + ", " + y + ")";
     }
 
+    boolean isColliding(Sprite s)
+    {
+        if(s.right < left) {
+            return false;
+        }
+        if(s.left > right) {
+            return false;
+        }
+        if(s.bottom < top) {
+            return false;
+        }
+        return s.top <= bottom;
+    }
+
     @Override
-    void update() {
+    void update(Link link, ArrayList<Sprite> sprites) {
+        if (isColliding(link)) {
+            if (link.right > left && link.oldRight <= left) {
+                link.absX = link.oldLeft;
+            } else if (link.left < right && link.oldLeft >= right) {
+                link.absX = link.oldRight - link.width;
+            } else if (link.bottom > top && link.oldBottom <= top) {
+                link.absY = link.oldTop;
+            } else if (link.top < bottom && link.oldTop >= bottom) {
+                link.absY = link.oldBottom - link.height;
+            }
+        }
+
 
     }
 

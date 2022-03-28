@@ -46,11 +46,6 @@ class View extends JPanel
 		for(int i = 0; i < model.sprites.size(); i++)
 		{
 			Sprite s = model.sprites.get(i);
-			if(s instanceof Brick b)
-			{
-				if(b.view == null)
-					b.setView(this);
-			}
 			s.draw(g);
 		}
 		link.draw(g);

@@ -16,11 +16,13 @@ class Model
     ArrayList<Sprite> sprites;
     Link link;
     View view;
+    boolean fixed = false;
 
     Model(Link l)
     {
         sprites = new ArrayList<Sprite>();
         link = l;
+        sprites.add(link);
     }
 
     void setView(View v)
@@ -34,6 +36,7 @@ class Model
     }
 
 
+
     public void update(Link l)
     {
         link = l;
@@ -41,38 +44,12 @@ class Model
         while(iter.hasNext())
         {
             Sprite s = iter.next();
-            if(s instanceof Brick b) {
-                if (isColliding(link, b)) {
-                    if (link.right > b.left && link.oldRight <= b.left) {
-                        link.absX = link.oldLeft;
-                    } else if (link.left < b.right && link.oldLeft >= b.right) {
-                        link.absX = link.oldRight - link.width;
-                    } else if (link.bottom > b.top && link.oldBottom <= b.top) {
-                        link.absY = link.oldTop;
-                    } else if (link.top < b.bottom && link.oldTop >= b.bottom) {
-                        link.absY = link.oldBottom - link.height;
-                    }
-                }
-            }
+            s.update(link, sprites);
+            if(s.delete)
+                iter.remove();
         }
-        link.update();
-    }
-
-    boolean isColliding(Link l, Brick b)
-    {
-        if(l.right < b.left) {
-            return false;
-        }
-        if(l.left > b.right) {
-            return false;
-        }
-        if(l.bottom < b.top) {
-            return false;
-        }
-        if(l.top > b.bottom) {
-            return false;
-        }
-        return true;
+        System.out.println(link);
+        link.update(null, sprites);
     }
 
     public Model(Json ob)
@@ -83,9 +60,10 @@ class Model
         {
             if(tmpList.get(i).toString().charAt(2) == 'x')
                 sprites.add(new Brick(tmpList.get(i)));
-            else if(tmpList.get(i).toString().charAt(2) == 'a') {
+            else if(tmpList.get(i).toString().charAt(2) == 'a')
                 sprites.add(new Link(tmpList.get(i)));
-            }
+            else if(tmpList.get(i).toString().charAt(2) == 'X')
+                sprites.add(new Pot(tmpList.get(i)));
         }
     }
 
@@ -120,7 +98,6 @@ class Model
         }
         return ob;
     }
-
 
     public void addPot(int x, int y) {
         sprites.add(new Pot(x, y));

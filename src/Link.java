@@ -4,16 +4,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
+import java.util.ArrayList;
 
 public class Link extends Sprite {
     int height = 70;
     int width = 60;
     int absX = 85;
     int absY = 165;
-    int top = absY;
-    int bottom = absY + height;
-    int left = absX;
-    int right = absX + width;
+
     double speed = 8.0;
     int oldRight;
     int oldLeft;
@@ -27,6 +25,10 @@ public class Link extends Sprite {
 
     public Link()
     {
+        top = absY;
+        bottom = absY + height;
+        left = absX;
+        right = absX + width;
         link_images = new BufferedImage[50];
         for(int i = 0; i < 50; i++)
         {
@@ -79,7 +81,7 @@ public class Link extends Sprite {
     }
 
     @Override
-    void update()
+    void update(Link l, ArrayList<Sprite> sprites)
     {
         oldRight = right;
         oldLeft = left;
@@ -118,7 +120,6 @@ public class Link extends Sprite {
             if(!(controller.UP && controller.LEFT && controller.RIGHT)) {
                 g.drawImage(Link.link_images[4 + count], x, y, null);
                 lastImageIndex = 4 + count;
-                System.out.println("Last: " + count);
             }
             count++;
         }
@@ -128,7 +129,6 @@ public class Link extends Sprite {
             if(!(controller.UP || controller.DOWN || controller.RIGHT)) {
                 g.drawImage(Link.link_images[13 + count], x, y, null);
                 lastImageIndex = 13 + count;
-                System.out.println("Last: " + count);
             }
             count++;
         }
@@ -138,7 +138,6 @@ public class Link extends Sprite {
             if(!(controller.UP || controller.LEFT || controller.DOWN)) {
                 g.drawImage(Link.link_images[30 + count], x, y, null);
                 lastImageIndex = 30 + count;
-                System.out.println("Last: " + count);
             }
             count++;
         }
@@ -148,14 +147,12 @@ public class Link extends Sprite {
             if(!(controller.DOWN && controller.LEFT && controller.RIGHT)) {
                 g.drawImage(Link.link_images[40 + count], x, y, null);
                 lastImageIndex = 40 + count;
-                System.out.println("Last: " + count);
             }
             count++;
         }
         if(!(controller.UP || controller.DOWN || controller.LEFT || controller.RIGHT))
         {
             g.drawImage(Link.link_images[lastImageIndex], x, y, null);
-            System.out.println(lastImageIndex);
         }
     }
 
